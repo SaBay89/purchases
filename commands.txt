@@ -1,0 +1,16 @@
+touch .gitignore
+# Ignoriere Umgebungsvariablen (Passwörter, API Keys)
+.env
+
+# Ignoriere Python Cache-Dateien
+__pycache__/
+*.pyc
+
+# Ignoriere virtuelle Umgebungen (falls du eine nutzt)
+venv/
+.venv/
+env/
+
+# Ignoriere Log-Dateien
+logs/
+*.log

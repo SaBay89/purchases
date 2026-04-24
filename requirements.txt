@@ -1,0 +1,6 @@
+pandas
+seaborn
+streamlit
+mcp
+openai 
+pydantic
