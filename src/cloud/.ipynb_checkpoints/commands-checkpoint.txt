@@ -1,0 +1,31 @@
+# Solution 1
+streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0
+Lösung 1: Die Chrome-Ausnahme für dein Pixel (Der schnellste Weg)
+Da du das System aktuell nur für dich selbst baust, kannst du deinem Pixel-Handy einfach sagen: "Vertraue dieser einen, unverschlüsselten IP-Adresse trotzdem!"
+
+Öffne den Chrome-Browser auf deinem Pixel.
+
+Tippe oben in die Adresszeile genau das hier ein und drücke Enter:
+chrome://flags
+
+Oben erscheint nun eine Suchleiste ("Search flags"). Suche dort nach:
+insecure origins
+
+Du siehst nun die Einstellung: „Insecure origins treated as secure“.
+
+In das Textfeld darunter trägst du die genaue Adresse deines Servers ein (inklusive http:// und Port), zum Beispiel:
+http://192.168.1.100:8501 (Ersetze die Zahlen durch deine echte Server-IP)
+
+Klicke auf den Button rechts daneben und ändere ihn von Disabled auf Enabled.
+
+Ganz unten auf dem Bildschirm erscheint jetzt ein blauer Button Relaunch. Klicke darauf, um Chrome neu zu starten.
+
+Wenn du jetzt deine Streamlit-Seite öffnest, wird Chrome dich ganz normal fragen: "Darf diese Seite die Kamera nutzen?" und alles funktioniert.
+
+
+# Solution 2
+
+snap install ngrok
+
+streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0
+ngrok http 8501
