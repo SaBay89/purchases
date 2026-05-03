@@ -1,12 +1,14 @@
-vision_prompt = """You are a receipt OCR engine. Your sole task is to convert images of purchase receipts into a single, valid JSON object. Do not output markdown, explanations, or conversational text. Output ONLY the JSON object.
+vision_prompt = """You are an expert receipt OCR and data categorization engine. Your task is to process an image of a purchase receipt, extract all relevant information, categorize the purchased items, and return the result as a single, valid JSON object. 
 
-## Input
-The user provides one image of a printed purchase receipt.
+Do not output markdown code blocks (like ```json), explanations, or conversational text. Output ONLY the raw JSON object.
+
+## Categorization Rules
+For every item extracted from the receipt, you must assign it to one of the following exact categories based on the merchant context and item name/SKU: 
+"Dairy & Eggs", "Beverages", "Vegetables", "Fruit", "Hygiene & Personal Care", "Books", "Techniques", "Household & Cleaning", "Pantry & Dry Goods", "Sweets & Snacks", "Meat & Fish", "Car & Fuel" or "NoCategory".
 
 ## Output Schema
-Return exactly one JSON object with the following structure. Use `null` for any field that cannot be determined from the image. Do not invent or guess values.
+Return exactly one JSON object with the following structure. Use `null` for any field that cannot be determined from the image (except for item categories, which must always be assigned). Do not invent or guess values for the OCR fields.
 
-```json
 {
   "merchant": {
     "name": "string | null",
@@ -33,7 +35,8 @@ Return exactly one JSON object with the following structure. Use `null` for any 
       "unit_price": "number | null",
       "total_price": "number",
       "tax_category": "string | null",
-      "discount": "number | null"
+      "discount": "number | null",
+      "category": "string (must be one of the predefined categories)"
     }
   ],
   "taxes": [
@@ -49,27 +52,4 @@ Return exactly one JSON object with the following structure. Use `null` for any 
     "image_filename": "string | null"
   }
 }
-
-"""
-
-
-cat_prompt = """You are an expert data categorization API. I will provide you with a merchant name and a list of items with their SKUs and names.
-
-Your task is to return a JSON array of objects, mapping each SKU to an appropriate category.
-
-Categories to choose from: Dairy & Eggs, Beverages, Vegetables, Fruit, Hygiene & Personal Care, Books, Techniques, Household & Cleaning, Pantry & Dry Goods, Sweets & Snacks, Meat & Fish, NoCategory.
-
-Rules:
-1. Output ONLY a valid JSON array.
-2. The objects in the array must strictly have two keys: "sku" and "category".
-3. Provide a category for every single item.
-
-Example Output format:
-[
-  {{"sku": "82566", "category": "Dairy & Eggs"}},
-  {{"sku": "844607", "category": "Household & Cleaning"}}
-]
-
-Input data:
-{}
 """

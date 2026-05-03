@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 def save_data(pydantic_object, cursor, conn=None, commit=True):
     """
     Persists receipt data from a Pydantic object into a relational database.
@@ -64,7 +65,7 @@ def save_data(pydantic_object, cursor, conn=None, commit=True):
             item.unit_price, item.total_price, item.tax_category, item.discount, 
             item.category, trans.date, trans.time, trans.currency, 
             trans.total_amount, trans.payment_method, trans.card_last_four, 
-            trans.receipt_number, meta.ocr_confidence, meta.image_filename
+            trans.receipt_number, meta.ocr_confidence, meta.source
         ))
     
     # 4. Transaction Management
@@ -73,3 +74,17 @@ def save_data(pydantic_object, cursor, conn=None, commit=True):
     
     print(f"[Log] Successfully processed {len(items)} items for Merchant ID {merchant_id}.")
     return merchant_id
+
+
+def read_data(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    df_items = pd.read_sql_query("SELECT * FROM items", conn).drop_duplicates()
+    df_merchant = pd.read_sql_query("SELECT * FROM merchant", conn).drop_duplicates()
+    df_merchant = df_merchant.rename(columns = {'name':'merchant'})
+
+    df = pd.merge(df_items,df_merchant,how='left',left_on='merchant_id',right_on='id')
+
+    conn.close()
+    return df

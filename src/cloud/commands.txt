@@ -1,5 +1,9 @@
 # Solution 1
 streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0
+
+nohup streamlit run app.py --server.port 8501 --server.
+address 0.0.0.0 >> ~/projects/purchases/purchases/logs/streamlit_dataupload.txt &
+
 Lösung 1: Die Chrome-Ausnahme für dein Pixel (Der schnellste Weg)
 Da du das System aktuell nur für dich selbst baust, kannst du deinem Pixel-Handy einfach sagen: "Vertraue dieser einen, unverschlüsselten IP-Adresse trotzdem!"
 
